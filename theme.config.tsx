@@ -8,7 +8,7 @@ const config: DocsThemeConfig = {
     },
     docsRepositoryBase: 'https://github.com/CiciHuang0000/2650nongreedytrees',
     footer: {
-        text: 'CiCi Huang',
+        text: 'Alitzel Serrano Laguna, Morgan Cunningham, Yingqiu Huang',
     },
     editLink: {
         component: null,
