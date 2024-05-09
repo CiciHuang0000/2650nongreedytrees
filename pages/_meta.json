@@ -3,8 +3,9 @@
   "basics": "Decision Tree Basics",
   "algorithm": "Algorithm",
   "experiment": "Experiment",
-  "conclusion": "Conclusion",
+  "example": "Example Illustration",
   "related": "Related Work", 
+  "conclusion": "Conclusion",
   "reference": "Reference",
   "about": {
     "title": "About",
