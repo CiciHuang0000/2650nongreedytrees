@@ -32,10 +32,29 @@ $$
 L(\mathbf{W}, \Theta, \mathbf{D}) = \sum_{(\mathbf{x},y) \in \mathbf{D}} l(\Theta^T f (\text{sgn}(\mathbf{Wx})),y)
 $$
 
-However, direct global optimization of this empirical loss is challenging as it's discontinuous and piecewise-constant for $W$. To overcome the this challenge, a piecewise smooth upper bound on empirical loss is devloped, which make use of the latent variable defined above. The upper bound takes the form:
+However, direct global optimization of this empirical loss is challenging as it's discontinuous and piecewise-constant for $W$. 
+
+## Upper bound & updated objective function
+
+To overcome the this challenge, a piecewise smooth upper bound on empirical loss is devloped, which make use of the latent variable defined above. The upper bound takes the form:
 
 $$
-\mathcal{l}(\Theta^Tf(sgn(Wx)),y) \leq max_{g \in \mathbb{H}^m} (g^TWx+\mathcal{l}(\Theta^Tf(g),y)) - max_{h \in \mathbb{H}^m}(h^TWx)
+\ell(\Theta^Tf(sgn(W\mathbf{x})),y) \leq \max_{\mathbf{g} \in \mathbb{H}^m} (\mathbf{g}^TWx+\mathcal{l}(\Theta^Tf(\mathbf{g}),y)) - \max_{\mathbf{h} \in \mathbb{H}^m}(\mathbf{h}^TW\mathbf{x})
 $$
 
-This upper bound will be used in the algorithm in the next section and will be explained in more detial. 
+where the first term maximizes over $g$, which is called *loss-augmented inference* that can be solved exactly. 
+
+It is also notable that the loss term on the LHS is invariant to the scale of W, but the upper bound on the RHS is not. Therefore, a regularizer on the norm of W is introduced when optimizing the bound. By incorporating both the upper bound and the regularization on weights, we obtained the following optimization problem called the *surrogate objective*:
+
+$$
+\text{minimize } L'(W, \Theta; D) = \sum_{(x,y) \in D} \left( \max_{\mathbf{g} \in \mathbb{H}^m} \mathbf{g}^T Wx + \ell(\Theta)^T f(\mathbf{g}, y) - \max_{h \in \mathbb{H}^m} \mathbf{h}^T Wx \right)
+$$
+
+$$
+\text{s.t. } \|\mathbf{w}_i\|^2 \leq \nu \text{ for all } i \in \{1, \ldots, m\}
+$$
+
+where $\nu \in \mathbb{R}^+ is a regularization parameter and $\mathbf{w}_i is the i_{th} row of the weight matrix W. For all values of $\nu$, we have $$ L(W, \Theta; D) \leq  L'(W, \Theta; D)$. 
+
+The surrogate objective function is piecewise linear and convex-concave in W, which is much better behaved. The algorithm for solving this optimization problem is discussed in further detail in the next section.
+
